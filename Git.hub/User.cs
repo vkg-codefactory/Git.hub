@@ -7,6 +7,11 @@
         /// </summary>
         public string Login { get; internal set; }
 
+        /// <summary>
+        /// The avatar URL
+        /// </summary>
+        public string AvatarUrl { get; set; }
+
         public User()
         {
         }
