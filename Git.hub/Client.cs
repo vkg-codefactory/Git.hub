@@ -148,6 +148,19 @@ namespace Git.hub
             return user.Data;
         }
 
+        public User GetUser(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException("Empty username", nameof(userName));
+            }
+
+            var request = new RestRequest($"/users/{userName}");
+
+            var user = client.Get<User>(request);
+            return user.Data;
+        }
+
         /// <summary>
         /// Searches through all of Github's repositories, similar to the search on the website itself.
         /// </summary>
