@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
@@ -9,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("GitHub API for C#")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Git.hub")]
+[assembly: AssemblyProduct("GitExtensions")]
 [assembly: AssemblyCopyright("Copyright (c) 2012 Marcus Bauer <mabako@gmail.com>")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
