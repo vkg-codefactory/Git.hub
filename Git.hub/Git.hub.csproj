@@ -46,9 +46,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="15.8.132" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\CommonAssemblyInfoExternals.cs">
-      <Link>Properties\CommonAssemblyInfoExternals.cs</Link>
-    </Compile>
     <Compile Include="APIv2\RepositoryV2.cs" />
     <Compile Include="Branch.cs" />
     <Compile Include="Client.cs" />
