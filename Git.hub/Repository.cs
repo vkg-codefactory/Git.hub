@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RestSharp;
 using Git.hub.util;
+using RestSharp;
 
 namespace Git.hub
 {
@@ -12,6 +10,7 @@ namespace Git.hub
         public string Name { get; internal set; }
         public string Description { get; internal set; }
         public string Homepage { get; internal set; }
+        public string DefaultBranch { get; internal set; }
         public User Owner { get; internal set; }
         public bool Fork { get; internal set; }
         public int Forks { get; internal set; }
@@ -88,9 +87,29 @@ namespace Git.hub
         }
 
         /// <summary>
+        /// Retrieves the name of the default branch
+        /// </summary>
+        /// <returns>The name of the default branch</returns>
+        public string GetDefaultBranch()
+        {
+            RestRequest request = new RestRequest("/repos/{user}/{repo}");
+            request.AddUrlSegment("user", Owner.Login);
+            request.AddUrlSegment("repo", Name);
+
+            var repo = _client.Get<Repository>(request).Data;
+
+            if (repo == null)
+            {
+                return null;
+            }
+
+            return repo.DefaultBranch;
+        }
+
+        /// <summary>
         /// Lists all open pull requests
         /// </summary>
-        /// <returns>llist of all open pull requests</returns>
+        /// <returns>list of all open pull requests</returns>
         public IList<PullRequest> GetPullRequests()
         {
             var request = new RestRequest("/repos/{user}/{repo}/pulls");
@@ -141,7 +160,8 @@ namespace Git.hub
 
             request.RequestFormat = DataFormat.Json;
             request.JsonSerializer = new ReplacingJsonSerializer("\"x__custom__base\":\"", "\"base\":\"");
-            request.AddBody(new {
+            request.AddBody(new
+            {
                 title = title,
                 body = body,
                 head = headBranch,
@@ -149,7 +169,7 @@ namespace Git.hub
             });
 
             var pullrequest = _client.Post<PullRequest>(request).Data;
-            if(pullrequest == null)
+            if (pullrequest == null)
                 return null;
 
             pullrequest._client = _client;
@@ -170,9 +190,8 @@ namespace Git.hub
 
             ghRef._client = _client;
             ghRef.Repository = this;
-            return ghRef;   
+            return ghRef;
         }
-
 
         /// <summary>
         /// Creates a new issue
