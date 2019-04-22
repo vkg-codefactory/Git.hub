@@ -11,6 +11,7 @@
     <RootNamespace>Git.hub.Demo</RootNamespace>
     <AssemblyName>Git.hub.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
