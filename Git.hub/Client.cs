@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -148,7 +149,7 @@ namespace Git.hub
             return user.Data;
         }
 
-        public User GetUser(string userName)
+        public async Task<User> GetUserAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
             {
@@ -157,7 +158,7 @@ namespace Git.hub
 
             var request = new RestRequest($"/users/{userName}");
 
-            var user = client.Get<User>(request);
+            var user = await client.ExecuteGetTaskAsync<User>(request);
             return user.Data;
         }
 
