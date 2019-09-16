@@ -35,7 +35,7 @@ namespace Git.hub
             request.AddUrlSegment("issue", Number.ToString());
 
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(new {
+            request.AddJsonBody(new {
                 body = body
             });
             return _client.Post<IssueComment>(request).Data;

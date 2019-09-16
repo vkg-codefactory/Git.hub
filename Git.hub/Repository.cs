@@ -160,7 +160,7 @@ namespace Git.hub
 
             request.RequestFormat = DataFormat.Json;
             request.JsonSerializer = new ReplacingJsonSerializer("\"x__custom__base\":\"", "\"base\":\"");
-            request.AddBody(new
+            request.AddJsonBody(new
             {
                 title = title,
                 body = body,
@@ -206,7 +206,7 @@ namespace Git.hub
             request.AddUrlSegment("repo", Name);
 
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(new
+            request.AddJsonBody(new
             {
                 title = title,
                 body = body

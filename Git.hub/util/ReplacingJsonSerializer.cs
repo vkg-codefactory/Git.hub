@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RestSharp.Serialization.Json;
 using RestSharp.Serializers;
 
 namespace Git.hub.util
@@ -44,18 +45,6 @@ namespace Git.hub.util
             set
             {
                 serializer.DateFormat = value;
-            }
-        }
-
-        public string Namespace
-        {
-            get
-            {
-                return serializer.Namespace;
-            }
-            set
-            {
-                serializer.Namespace = value;
             }
         }
 
