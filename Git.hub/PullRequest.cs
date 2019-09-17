@@ -117,7 +117,7 @@ namespace Git.hub
             request.AddUrlSegment("pull", Number.ToString());
 
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(new
+            request.AddJsonBody(new
             {
                 state = state
             });
