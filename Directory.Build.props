@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+  <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup>
     <Copyright>Copyright &#xA9; 2012 Marcus Bauer &lt;mabako@gmail.com&gt; // Copyright &#xA9; 2019 Git Extensions</Copyright>
