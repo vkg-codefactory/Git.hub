@@ -12,6 +12,7 @@ namespace Git.hub
         public string Homepage { get; internal set; }
         public string DefaultBranch { get; internal set; }
         public User Owner { get; internal set; }
+        public string OwnerLogin => Owner?.Login;
         public bool Fork { get; internal set; }
         public int Forks { get; internal set; }
         public bool Private { get; internal set; }
@@ -63,9 +64,9 @@ namespace Git.hub
         /// <returns></returns>
         public Repository CreateFork()
         {
-            RestRequest request = new RestRequest("/repos/{user}/{repo}/forks");
-            request.AddUrlSegment("user", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{user}/{repo}/forks")
+                .AddUrlSegment("user", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             Repository forked = _client.Post<Repository>(request).Data;
             forked._client = _client;
@@ -79,9 +80,9 @@ namespace Git.hub
         /// <returns>list of all branches</returns>
         public IList<Branch> GetBranches()
         {
-            RestRequest request = new RestRequest("/repos/{user}/{repo}/branches");
-            request.AddUrlSegment("user", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{user}/{repo}/branches")
+                .AddUrlSegment("user", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             return _client.GetList<Branch>(request);
         }
@@ -92,18 +93,13 @@ namespace Git.hub
         /// <returns>The name of the default branch</returns>
         public string GetDefaultBranch()
         {
-            RestRequest request = new RestRequest("/repos/{user}/{repo}");
-            request.AddUrlSegment("user", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{user}/{repo}")
+                .AddUrlSegment("user", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             var repo = _client.Get<Repository>(request).Data;
 
-            if (repo == null)
-            {
-                return null;
-            }
-
-            return repo.DefaultBranch;
+            return repo == null ? null : repo.DefaultBranch;
         }
 
         /// <summary>
@@ -112,9 +108,9 @@ namespace Git.hub
         /// <returns>list of all open pull requests</returns>
         public IList<PullRequest> GetPullRequests()
         {
-            var request = new RestRequest("/repos/{user}/{repo}/pulls");
-            request.AddUrlSegment("user", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{user}/{repo}/pulls")
+                .AddUrlSegment("user", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             var list = _client.GetList<PullRequest>(request);
             if (list == null)
@@ -131,10 +127,10 @@ namespace Git.hub
         /// <returns>the single pull request</returns>
         public PullRequest GetPullRequest(int id)
         {
-            var request = new RestRequest("/repos/{user}/{repo}/pulls/{pull}");
-            request.AddUrlSegment("user", Owner.Login);
-            request.AddUrlSegment("repo", Name);
-            request.AddUrlSegment("pull", id.ToString());
+            var request = new RestRequest("/repos/{user}/{repo}/pulls/{pull}")
+                .AddUrlSegment("user", OwnerLogin)
+                .AddUrlSegment("repo", Name)
+                .AddUrlSegment("pull", id.ToString());
 
             var pullrequest = _client.Get<PullRequest>(request).Data;
             if (pullrequest == null)
@@ -154,9 +150,9 @@ namespace Git.hub
         /// <returns></returns>
         public PullRequest CreatePullRequest(string headBranch, string baseBranch, string title, string body)
         {
-            var request = new RestRequest("/repos/{name}/{repo}/pulls");
-            request.AddUrlSegment("name", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{name}/{repo}/pulls")
+                .AddUrlSegment("name", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             request.RequestFormat = DataFormat.Json;
             request.JsonSerializer = new ReplacingJsonSerializer("\"x__custom__base\":\"", "\"base\":\"");
@@ -180,7 +176,7 @@ namespace Git.hub
         public GitHubReference GetRef(string refName)
         {
             var request = new RestRequest("/repos/{owner}/{repo}/git/refs/{ref}");
-            request.AddUrlSegment("owner", Owner.Login);
+            request.AddUrlSegment("owner", OwnerLogin);
             request.AddUrlSegment("repo", Name);
             request.AddUrlSegment("ref", refName);
 
@@ -201,9 +197,9 @@ namespace Git.hub
         /// <returns>the issue if successful, null otherwise</returns>
         public Issue CreateIssue(string title, string body)
         {
-            var request = new RestRequest("/repos/{owner}/{repo}/issues");
-            request.AddUrlSegment("owner", Owner.Login);
-            request.AddUrlSegment("repo", Name);
+            var request = new RestRequest("/repos/{owner}/{repo}/issues")
+                .AddUrlSegment("owner", OwnerLogin)
+                .AddUrlSegment("repo", Name);
 
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(new
@@ -221,19 +217,10 @@ namespace Git.hub
             return issue;
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is Repository && GetHashCode() == obj.GetHashCode();
-        }
+        public override bool Equals(object obj) => obj is Repository && GetHashCode() == obj.GetHashCode();
 
-        public override int GetHashCode()
-        {
-            return GetType().GetHashCode() + ToString().GetHashCode();
-        }
+        public override int GetHashCode() => GetType().GetHashCode() + ToString().GetHashCode();
 
-        public override string ToString()
-        {
-            return Owner.Login + "/" + Name;
-        }
+        public override string ToString() => OwnerLogin + "/" + Name;
     }
 }
